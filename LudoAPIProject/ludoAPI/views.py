@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponse
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
@@ -51,14 +52,27 @@ def signup_view(request):
     return JsonResponse({"error": "Method not allowed"}, status=405)
 
 
-@csrf_exempt
+
 def login_view(request):
     if request.method == 'POST':
         u = request.POST.get('username')
         p = request.POST.get('password')
-        user = authenticate(username=u, password=p)
-        if user:
-            # This starts the session for the WebView
+        user = authenticate(request, username=u, password=p)
+
+        if user is not None:
             login(request, user)
-            return JsonResponse({"status": "success", "username": u})
-        return JsonResponse({"error": "Invalid login"}, status=401)
+            # This HTML calls your Java "WebAppInterface" to move to index.html
+            return HttpResponse("""
+                <html>
+                    <body>
+                        <script>
+                            // This matches your @JavascriptInterface login() logic
+                            window.Android.sendPlayerData(4, 0, ["player", "bot", "bot", "bot"]);
+                        </script>
+                    </body>
+                </html>
+            """)
+        else:
+            return HttpResponse("Invalid Login. <a href='javascript:history.back()'>Try again</a>")
+
+    return HttpResponse("Please log in.")
