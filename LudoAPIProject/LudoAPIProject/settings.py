@@ -125,3 +125,13 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Add these to trust your local app and Render
+CSRF_TRUSTED_ORIGINS = [
+    'https://ludo-online-game-api.onrender.com',
+    'http://localhost:63343',
+    'http://127.0.0.1'
+]
+
+# Disable strict origin check for testing
+CSRF_ALLOW_WIDGET_RESOLVER = True
