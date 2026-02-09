@@ -53,6 +53,7 @@ def signup_view(request):
 
 
 
+csrf_exempt
 def login_view(request):
     if request.method == 'POST':
         u = request.POST.get('username')
