@@ -6,5 +6,7 @@ router = DefaultRouter()
 router.register(r'sessions', SessionsViewSet)
 
 urlpatterns = [
-    path('', include(router.urls),)
+    path('', include(router.urls)),
+    path('signup/', signup_view, name='signup'),
+    path('login/', login_view, name='login'),
 ]

@@ -17,25 +17,19 @@ class SessionsViewSet(viewsets.ModelViewSet):
     serializer_class = SessionsSerializer
     lookup_field = 'name'
 
-    # 1. Action for the Die Roll
-    # URL: /sessions/{name}/{p_name}/roll/{die}/
     @action(detail=True, methods=['get', 'post'], url_path=r'(?P<p_name>\w+)/roll/(?P<die>\d+)')
     def roll_die(self, request, name=None, p_name=None, die=None):
         session = self.get_object()
 
-        # Uses p_name exactly as Java sends it
         setattr(session, f'{p_name}DieNumber', int(die))
         session.save()
 
         return Response({"status": "Die updated"})
 
-    # 2. Action for the Piece Move
-    # URL: /sessions/{name}/{p_name}/move/{piece}/
     @action(detail=True, methods=['get', 'post'], url_path=r'(?P<p_name>\w+)/move/(?P<piece>\w+)')
     def move_piece(self, request, name=None, p_name=None, piece=None):
         session = self.get_object()
 
-        # Uses p_name exactly as Java sends it
         setattr(session, f'{p_name}MovedPiece', piece)
         session.save()
 
